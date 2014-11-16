@@ -8,6 +8,7 @@
 #include <fstream>
 #include <functional>
 #include <vector>
+#include <iomanip>
 
 int main()
 {
@@ -16,35 +17,26 @@ int main()
 
     std::ofstream output("output.txt");
 
-    // Runge-Kutta
+    for (int n = 10; n <= 100; n += 10)
     {
-        int n = 10;
         double x = 2, y = 1;
-        std::vector<double> res = RKM::Result(deriv, 2, 1);
+        std::vector<double> res1 = RKM::Result(deriv, x, y, n);
+        std::vector<double> res2 = Adams::Result(deriv, x, y, n);
 
         double h = 1. / abs(n);
-        output << "RUNGE-KUTTA h = " << h << std::endl << std::endl;
-        for (double y : res)
+        double err1 = 0, err2 = 0;
+        for (size_t i = 0; i < res1.size(); i++)
         {
-            output << x << '\t' << y << '\t' << answer(x) << '\t' << abs(y - answer(x)) << std::endl;
+            double t1 = abs(res1[i] - answer(x)), t2 = abs(res2[i] - answer(x));
+            
+            if (t1 > err1)
+                err1 = t1;
+            if (t2 > err2)
+                err2 = t2;
+
             x += h;
         }
-    }
 
-    output << std::endl;
-
-    // Adams
-    {
-        int n = 10;
-        double x = 2, y = 1;
-        std::vector<double> res = Adams::Result(deriv, x, y, n);
-
-        double h = 1./abs(n);
-        output << "ADAMS h = " << h << std::endl << std::endl;
-        for (double y : res)
-        {
-            output << x << '\t' << y << '\t' << answer(x) << '\t' << abs(y - answer(x)) << std::endl;
-            x += h;
-        }
+        output << n << '\t' << std::setw(10) << h << '\t' << err1 << '\t' << err2 << std::endl;
     }
 }

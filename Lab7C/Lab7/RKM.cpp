@@ -43,7 +43,7 @@ std::vector<double> RKM::Result(const std::function<double(double, double)>& der
     double k1, k2, k3, k4;
     double x = x0, y = y0;
 
-    while (abs(x - x0) < 1)
+    for (int i = 0; i < n; i++)
     {
         k1 = deriv(x, y);
         k2 = deriv(x + h / 2, y + k1 * h / 2);
