@@ -23,6 +23,7 @@ public:
 	Polynomial operator*(const Polynomial &other) const;
 	Polynomial Polynomial::operator+(const Polynomial &other) const;	
 	vector<Item> C() const { return vec;  };
+    Item Polynomial::GetRootBin(double left, double right, double acc) const;
 
 	friend std::ostream &operator<<(std::ostream &os, const Polynomial &p);
 };

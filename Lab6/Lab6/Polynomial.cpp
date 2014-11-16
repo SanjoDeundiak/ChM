@@ -77,3 +77,30 @@ Polynomial Polynomial::Derivative() const
 
 	return Polynomial(der);
 }
+
+bool sgn(double x)
+{
+    return x > 0;
+}
+
+Item Polynomial::GetRootBin(double left, double right, double acc) const
+{
+    long it = 0;
+    double mid, midvalue;
+
+    if (sgn((*this)(left)) == sgn((*this)(right)))
+        throw std::runtime_error("No root or there are more then 1");
+
+    do
+    {
+        ++it;
+        mid = (left + right) / 2;
+        midvalue = (*this)(mid);
+        if (midvalue * (*this)(left) > 0)
+            left = mid;
+        else
+            right = mid;
+    } while (right - left > acc || abs(midvalue) > acc);
+
+    return mid;
+}

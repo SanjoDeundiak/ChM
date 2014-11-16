@@ -11,7 +11,7 @@ template <typename T>
 std::vector<T>& reverse(std::vector<T>& v)
 {
     for (size_t i = 0; i < v.size() / 2; i++)
-        v[i] = v[v.size() - i - 1];
+        std::swap(v[i], v[v.size() - i - 1]);
 
     return v;
 }

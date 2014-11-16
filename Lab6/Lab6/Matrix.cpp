@@ -125,6 +125,29 @@ Matrix Matrix::operator*(const Matrix &other) const
 	return P;
 }
 
+Matrix Matrix::operator*(double val) const
+{
+    Matrix P(*this);
+
+    for (size_t row = 0; row < n; row++)
+    for (size_t col = 0; col < n; col++)
+        P[row][col] *= val;
+
+    return P;
+}
+
+
+Matrix Matrix::operator-(const Matrix &other) const
+{
+    Matrix P(n);
+
+    for (size_t i = 0; i < n; i++)
+    for (size_t j = 0; j < n; j++)
+        P[i][j] = (*this)[i][j] - other[i][j];
+
+    return P;
+}
+
 vector<double> Matrix::SolveL(const vector<double> &b) const
 {	
 	vector<double> r;
@@ -399,7 +422,7 @@ size_t Matrix::eigenValuesJacobi(vector<double> &eigenValues, vector< vector<dou
     return it;
 }
 
-size_t Matrix::eigenValuesScalar(double eigenValue, std::vector<double> &eigenVector, size_t itLimit) const
+size_t Matrix::eigenValuesScalar(double &eigenValue, std::vector<double> &eigenVector, size_t itLimit) const
 {
     GlobalLog << "####SCALAR METHOD####" << std::endl << std::endl;
 
@@ -459,7 +482,7 @@ void Matrix::eigenValuesDanilevski(std::vector<double> &eigenValuesvector, std::
     GlobalLog << "####DANILEVSKI METHOD####" << std::endl << std::endl;
 
     Matrix B(*this);
-    Matrix C1(n), C2(n);
+    Matrix C1(n), C2(n), S1(n, true), S2(n, true);
 
     for (size_t i = 0; i < n - 1; i++)
     {
@@ -467,17 +490,41 @@ void Matrix::eigenValuesDanilevski(std::vector<double> &eigenValuesvector, std::
         GlobalLog << "ITERATION #" << i << std::endl;
         GlobalLog << "C\n" << C1 << std::endl << std::endl;
         GlobalLog << "C-1\n" << C2 << std::endl << std::endl;
+        S2 = C2 * S2;
+        S1 = S1 * C1;
         B = C2 * B * C1;
         GlobalLog << "B\n" << B << std::endl << std::endl;
     }
 
-    std::vector<double> pol = reverse(B.GetColumn(n - 1));
-    pol = pol * (-1);
+    std::vector<double> pol = B.GetColumn(n - 1);
     pol.push_back(1);
+
+    if (n % 2 == 0)
+        pol = pol * (-1);
+    pol[pol.size() - 1] = (n % 2 == 0) ? 1 : 0;
 
     Polynomial p(pol);
 
-    GlobalLog << "RESULT: " << std::endl
-        << p;
+    GlobalLog << "EQUATION: " << std::endl
+        << p << std::endl;
+
+    eigenValuesvector.push_back(p.GetRootBin(9, 10, eps));
+    eigenValuesvector.push_back(p.GetRootBin(5, 6, eps));
+    eigenValuesvector.push_back(p.GetRootBin(4, 5, eps));
+    eigenValuesvector.push_back(p.GetRootBin(2, 3, eps));
+
+    GlobalLog << "EIGEN VALUES: " << eigenValuesvector << std::endl << std::endl;
+
+    for (size_t i = 0; i < eigenValuesvector.size(); i++)
+    {
+        vector<double> v(n);
+        v[v.size() - 1] = 1;
+        for (size_t j = v.size() - 1; j != 0; j--)
+            v[j - 1] = eigenValuesvector[i] * v[j] - B[j][n-1] * v[v.size() - 1];
+
+        v = S1 * v;
+        eigenVector.push_back(v);
+        GlobalLog << "EIGEN VECTOR #" << i + 1 << ' ' << v << std::endl;
+    }
 }
 

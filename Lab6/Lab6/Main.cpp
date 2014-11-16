@@ -9,13 +9,29 @@ int main()
 {
     std::ifstream input("input.txt");
     Matrix m(4, input);
-    std::vector< std::vector<double>> eigenVectors;
-    std::vector<double> eigenValues;
 
-    double eigenValue = 0;
-    std::vector<double> eigenVector;
-   
-    //m.eigenValuesJacobi(eigenValues, eigenVectors);
-    //m.eigenValuesScalar(eigenValue, eigenVector);
-    m.eigenValuesDanilevski(eigenValues, eigenVectors);
+    /*{
+        std::vector< std::vector<double>> eigenVectors;
+        std::vector<double> eigenValues;
+        m.eigenValuesJacobi(eigenValues, eigenVectors);
+    }*/
+    {
+        double eigenValue = 0;
+        std::vector<double> eigenVector;
+        m.eigenValuesScalar(eigenValue, eigenVector);
+
+        Matrix b(m);
+        for (int i = 0; i < 4; i++)
+            b[i][i] -= eigenValue;
+        double newEigenValue = 0;
+        eigenVector.clear();
+        b.eigenValuesScalar(newEigenValue, eigenVector);
+        newEigenValue += eigenValue;
+        GlobalLog << "FINAL RESULT = " << newEigenValue << std::endl;
+    }
+    /*{
+        std::vector< std::vector<double>> eigenVectors;
+        std::vector<double> eigenValues;
+        m.eigenValuesDanilevski(eigenValues, eigenVectors);
+    }*/
 }

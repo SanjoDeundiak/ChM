@@ -14,8 +14,6 @@ class Matrix
 
     void findMax(size_t &i, size_t &j) const;
 
-    std::vector<double> &operator[](size_t i) { return A[i]; }
-
     void CCInvers(Matrix& B, Matrix& C) const;
 public:
 	Matrix(size_t dimension, double fill);
@@ -31,8 +29,11 @@ public:
     Matrix Inverse();
 
     Matrix operator*(const Matrix &other) const;
+    Matrix operator-(const Matrix &other) const;
+    Matrix Matrix::operator*(double val) const;
     std::vector<double> operator*(const std::vector<double> &vec) const;
 
+    std::vector<double> &operator[](size_t i) { return A[i]; }
     const std::vector<double> &operator[](size_t i) const { return A[i]; }
 
     std::vector<double> Solve(std::vector<double> b) const;
@@ -44,7 +45,7 @@ public:
     void LU(Matrix &L, Matrix &U, std::vector<double> &b) const;
 
     size_t eigenValuesJacobi(std::vector<double> &_eigenValuesvector, std::vector< std::vector<double> > &eigenVector, size_t itLimit = 1000) const;
-    size_t eigenValuesScalar(double eigenValue, std::vector<double> &eigenVector, size_t itLimit = 1000) const;
+    size_t eigenValuesScalar(double &eigenValue, std::vector<double> &eigenVector, size_t itLimit = 1000) const;
     void eigenValuesDanilevski(std::vector<double> &eigenValuesvector, std::vector< std::vector<double> > &eigenVector) const;
 
     Matrix Trans() const;
