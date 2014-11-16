@@ -1,9 +1,9 @@
 #include "RKM.h"
 
-std::function<double(double)> RKM::Solution(const std::function<double(double, double)>& func, double x0, double y0, double h /*=0.1*/)
+std::function<double(double)> RKM::Solution(const std::function<double(double, double)>& func, double x0, double y0, int n /*=10*/)
 {
     RKMResult result;
-    result.h = h;
+    result.h = 1./abs(n);
     result.x0 = x0;
     result.y0 = y0;
     result.deriv = func;
@@ -35,10 +35,10 @@ double RKM::RKMResult::operator()(double xr)
     return y;
 }
 
-std::vector<double> RKM::Result(const std::function<double(double, double)>& deriv, double x0, double y0, double h /*= 0.1*/)
+std::vector<double> RKM::Result(const std::function<double(double, double)>& deriv, double x0, double y0, int n /*= 10*/)
 {
     std::vector<double> result{ y0 };
-    h = abs(h);
+    double h = 1./abs(n);
 
     double k1, k2, k3, k4;
     double x = x0, y = y0;

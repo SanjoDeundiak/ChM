@@ -15,6 +15,6 @@ class RKM
     };
 
 public:
-    static std::function<double(double)> Solution(const std::function<double(double, double)>& func, double x0, double y0, double h = 0.1);
-    static std::vector<double> Result(const std::function<double(double, double)>& deriv, double x0, double y0, double h = 0.1);
+    static std::function<double(double)> Solution(const std::function<double(double, double)>& func, double x0, double y0, int n = 10);
+    static std::vector<double> Result(const std::function<double(double, double)>& deriv, double x0, double y0, int n = 10);
 };
