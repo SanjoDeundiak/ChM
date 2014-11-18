@@ -4,8 +4,6 @@
 *.o
 *.obj
 *.txt
-*.pdf
-*.png
 
 # Precompiled Headers
 *.gch
