@@ -5,8 +5,13 @@ void TMA::Iterate(double A, double B, double C, double D)
     if (i == n)
         throw std::exception("Too much iterations");
 
+    if (i == n-1 && C != 0)
+        throw std::exception("AAA2");
+
     if (i == 0)
     {
+        if (A != 0)
+            throw std::exception("AAA3");
         c[i] = C / B;
         d[i] = D / B;
     }
