@@ -32,7 +32,7 @@ void test()
     double xb = 1.4, f2 = kb*y(xb) + kdb*yd(xb);
 
     ofstream err("error.txt");
-    for (size_t N = 10; N <= 10000; N *= 2)
+    for (size_t N = 9; N == 9; N *= 2)
     {
         vector<double> res = FDM::Result(p, q, f, xa, kda, ka, f1, xb, kdb, kb, f2, N);
         double x = xa, h = (xb - xa) / N;
