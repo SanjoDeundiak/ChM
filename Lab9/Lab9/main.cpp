@@ -9,7 +9,6 @@
 // ANSWER = (x+0.2)*sin(M_PI*x/2)*cos(M_PI*t)
 
 #include "Hyper.h"
-#include "TMA1.h"
 #include <iostream>
 #include <algorithm>
 #include <iomanip>
@@ -19,8 +18,8 @@ func2 answ = [](double t, double x)->double{ return (x + 0.2)*sin(M_PI*x / 2)*co
 
 int Test()
 {
-    size_t const Nt = 10;
-    size_t const Nl = 5;
+    size_t const Nt = 1000;
+    size_t const Nl = 1000;
 
     func2 F = [](double t, double x)->double{ return -M_PI*cos(M_PI*t)*(cos(M_PI*x / 2) + 3 / 4 * M_PI*(x + 0.2)*sin(M_PI*x / 2)); };
     func u0 = [](double x)->double{ return (x + 0.2)*sin(M_PI*x / 2); };
@@ -32,47 +31,53 @@ int Test()
     double h = length / Nl;
     double dt = period / Nt;
 
-    std::vector<std::vector<double>> res;
-    try
-    {
-        res = Hyper::Process(0.5, F, u0, u1, u2, v0, Nt, Nl, period, length);
-    }
-    catch (std::exception& e)
-    {
-        std::cout << e.what() << std::endl;
-        std::cin.get();
-        return -1;
-    }
+    std::vector<std::vector<double>> res = Hyper::Process(0.75, F, u0, u1, u2, v0, Nt, Nl, period, length);
 
     std::ofstream out("output.txt");
 
-    TMA1 tma(3);
-    tma.Iterate(0, 1, 0, 1);
-    tma.Iterate(1, 1, 1, 6);
-    tma.Iterate(2, 1, 0, 7);
-    std::vector<double> r = tma.Result();
-    for (double a : r)
-        out << a << ' ';
-    out << std::endl;
-
-    // TestMax
     out << std::left;
-    {
-        for (size_t k = 7; k == 7; k++)
+    /*{
+        for (size_t k = 0; k < Nt + 1; k++)
         {
+            double m = 0;
             for (size_t n = 0; n < Nl + 1; n++)
             {
-                out << std::setw(4) << n*h << '\t';
-                out << std::setw(12) << answ(k*dt, n*h) << '\t' << std::setw(12) << res[k][n] << std::endl;//res[k][n] << '\t';
+                double a1 = answ(k*dt, n*h);
+                double a2 = res[k][n];
+                double err = abs(a1-a2);
+                m = (m*n + err) / (n + 1);
             }
-
-            out << std::endl;
+            out << std::setw(4) << k*dt << '\t'
+                << std::setw(12) << m << std::endl;
         }
+    }*/
+
+    //{
+    //    for (size_t k = 0; k < Nt + 1; k++)
+    //    {
+    //        double m = 0;
+    //        for (size_t n = 0; n < Nl + 1; n++)
+    //        if (abs(res[k][n]) > m)
+    //            m = abs(res[k][n]);
+
+    //        out << std::setw(4) << k*dt << '\t'
+    //            << std::setw(12) << m << std::endl;
+    //    }
+    //}
+
+    /*{
+        for (size_t n = 0; n < Nl + 1; n++)
+        out << std::setw(4) << n*h << '\t'
+            << std::setw(12) << res[Nt][n] << std::endl;
+    }*/
+
+    {
+        for (size_t n = 0; n < Nl + 1; n++)
+            out << std::setw(4) << n*h << '\t'
+            << std::setw(12) << answ(Nt*dt, n*h) - res[Nt][n] << std::endl;
     }
 
     out << std::endl;
-
-    std::cin.get();
 
     return 0;
 }

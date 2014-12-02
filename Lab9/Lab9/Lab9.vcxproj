@@ -81,12 +81,10 @@
     <ClCompile Include="Hyper.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TMA.cpp" />
-    <ClCompile Include="TMA1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hyper.h" />
     <ClInclude Include="TMA.h" />
-    <ClInclude Include="TMA1.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

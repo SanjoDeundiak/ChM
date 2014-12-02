@@ -3,15 +3,10 @@
 void TMA::Iterate(double A, double B, double C, double D)
 {
     if (i == n)
-        throw std::exception("Too much iterations");
-
-    if (i == n-1 && C != 0)
-        throw std::exception("AAA2");
+        return;
 
     if (i == 0)
     {
-        if (A != 0)
-            throw std::exception("AAA3");
         c[i] = C / B;
         d[i] = D / B;
     }
@@ -26,7 +21,7 @@ void TMA::Iterate(double A, double B, double C, double D)
 std::vector<double> TMA::Result()
 {
     if (i != n)
-        throw std::exception("Too few iterations");
+        return std::vector<double>();
 
     r[n - 1] = d[n - 1];;
     for (size_t i = n - 1; i > 0; i--)

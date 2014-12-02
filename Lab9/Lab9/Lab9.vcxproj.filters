@@ -24,18 +24,12 @@
     <ClCompile Include="Hyper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TMA1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TMA.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Hyper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TMA1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
